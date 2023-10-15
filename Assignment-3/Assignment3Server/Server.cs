@@ -66,6 +66,11 @@ public static class Util
         using (var memStream = new MemoryStream())
         {
             int bytesread = 0;
+            Response response = new Response();
+            if (!strm.DataAvailable) {
+                response.Status = "Only connection?!";
+                return response;
+            }
             do
             {
                 bytesread = strm.Read(resp, 0, resp.Length);
@@ -79,7 +84,7 @@ public static class Util
             methods.Add("update");
             methods.Add("delete");
             methods.Add("echo");
-            Response response = new Response();
+
             //Method cases
             if (requestData.Method == null) 
                 response.Status += "Missing method, ";
