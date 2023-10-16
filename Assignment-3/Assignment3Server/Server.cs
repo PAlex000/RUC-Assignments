@@ -105,20 +105,16 @@ public static class Util
                 {
                     if (tempPath.Length > 3) // So it's not just /api/categories
                         try
-                        {
-                            Int16.Parse(tempPath[3]);
-                        }
+                        { Int16.Parse(tempPath[3]); }
                         catch (Exception)
-                        {
-                            response.Status += "4 Bad Request";
-                        }
+                        { response.Status += "4 Bad Request";}
                 }
                 else
                 {
                     if (tempPath.Length != 3 && requestData.Body != null)
                         response.Status = "4 Bad Request";
                 }
-                if (requestData.Method == "update" && requestData.Body != null && requestData.Date.Length == 10)
+                if (requestData.Method == "update" && requestData.Body != null && isValidDate(requestData.Date))
                     if (tempPath.Length != 4)
                         response.Status = "4 Bad Request";
                 if (requestData.Method == "delete")
@@ -154,9 +150,7 @@ public static class Util
                     response.Status = "3 updated";
                 }
                 catch (Exception)
-                {
-                    response.Status = "5 Not Found";
-                }
+                { response.Status = "5 Not Found"; }
             }
             if (requestData.Method == "create" && response.Status == null)
             {
@@ -176,9 +170,7 @@ public static class Util
                     response.Status = "1 Ok";
                 }
                 catch (Exception)
-                {
-                    response.Status = "5 Not Found";
-                }
+                { response.Status = "5 Not Found"; }
             }
             return response;
         }
@@ -203,9 +195,13 @@ public static class Util
         string status = null;
         if (date == null)
             status += "missing date, ";
-        else if (date.Length != 10)
+        else if (!isValidDate(date))
             status += "illegal date, ";
         return status;
+    }
+    private static bool isValidDate(string date)
+    {
+        return date.Length == 10;
     }
     private static string checkBody(string body)
     {
