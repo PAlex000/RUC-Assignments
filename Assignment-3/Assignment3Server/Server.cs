@@ -49,7 +49,7 @@ public static class Util
 
     public static T FromJson<T>(this string element)
     {
-        return JsonSerializer.Deserialize<T>(element, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        return JsonSerializer.Deserialize<T>(element);
     }
 
     public static void SendRequest(this TcpClient client, string request)
@@ -106,7 +106,7 @@ public static class Util
                     response.Status += "missing body, ";
                 try
                 {
-                    FromJson<String>(response.Body);
+                    FromJson<Category>(requestData.Body);
                 }
                 catch (Exception)
                 {
@@ -164,6 +164,20 @@ public static class Util
                 }
                 else
                     response.Body = categories.ToJson();
+            }
+            if (requestData.Method == "update" && response.Status == null)
+            {
+
+                var uniqueID = Int16.Parse(tempPath[3]);
+                foreach (Category item in categories)
+                {
+                    if (item.Id == uniqueID)
+                    {
+                        var valami = FromJson<Category>(requestData.Body);
+                        item.Name = valami.Name;
+                        response.Status = "3 updated";
+                    }
+                }
             }
             return response;
         }
