@@ -169,9 +169,9 @@ public static class Util
             {
 
                 var uniqueID = Int16.Parse(tempPath[3]);
-                var valami = FromJson<Category>(requestData.Body);
+                var element = FromJson<Category>(requestData.Body);
                 int index = categories.FindIndex(item => item.Id == uniqueID);
-                categories[index] = valami;
+                categories[index] = element;
                 response.Status = "3 updated";
             }
             return response;
