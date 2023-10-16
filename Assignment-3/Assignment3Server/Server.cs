@@ -63,43 +63,24 @@ public static class Util
             } while (bytesread == 2048);
             string responseData = Encoding.UTF8.GetString(memStream.ToArray());
             var requestData = JsonSerializer.Deserialize<Request>(responseData, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-            List<string> methods = new List<string>();
-            methods.Add("create");
-            methods.Add("read");
-            methods.Add("update");
-            methods.Add("delete");
-            methods.Add("echo");
-
-            //Method cases
-            if (requestData.Method == null) 
-                response.Status += "Missing method, ";
-            else if (!methods.Contains(requestData.Method))
-                response.Status += "illegal method";
-            if (requestData.Path == null && requestData.Method != "echo")
-                response.Status += "missing resource, ";
-            //Date cases
-            if (requestData.Date == null)
-                response.Status += "missing date, ";
-            else if (requestData.Date.Length != 10)
-                response.Status += "illegal date, ";
-            //Body cases
-            if (requestData.Method == "echo" || requestData.Method == "create" || requestData.Method == "update")
+            List<string> methods = createMethodList();
+            if (checkMethod(requestData.Method, requestData.Path, methods) != null)
             {
-                if (requestData.Body == null)
-                    response.Status += "missing body, ";
-                try
-                {
-                    FromJson<Category>(requestData.Body);
-                }
-                catch (Exception)
-                {
-                    response.Status += "illegal body, ";
-                }
+                response.Status += checkMethod(requestData.Method, requestData.Path, methods);
+            }
+            if (checkDate(requestData.Date) != null)
+                response.Status += checkDate(requestData.Date);
+
+            if (requestData.Method == "echo" ||
+                requestData.Method == "create" ||
+                requestData.Method == "update")
+            {
+                if (checkBody(requestData.Body) != null)
+                    response.Status += (checkBody(requestData.Body));
             }
             //Echo case
             if (requestData.Method == "echo")
                 response.Body = requestData.Body;
-
             //Path cases
             string[] tempPath = new string[0];
             if (requestData.Path != null)
@@ -163,9 +144,7 @@ public static class Util
                 {
                     response.Status = "5 Not Found";
                 }
-
             }
-
             if (requestData.Method == "create" && response.Status == null)
             {
                 Category newCat = new Category();
@@ -187,11 +166,48 @@ public static class Util
                 {
                     response.Status = "5 Not Found";
                 }
-
             }
-
             return response;
         }
+    }
+    private static List<string> createMethodList()
+    {
+        return new List<string> {"create","read","update","delete", "echo"};
+    }
+    private static string checkMethod(string method, string path, List<string> methods)
+    {
+        string status = null;
+        if (method == null)
+            status += "Missing method, ";
+        else if (!methods.Contains(method))
+            status += "illegal method";
+        if (path == null && method != "echo")
+            status += "missing resource, ";
+        return status;
+    }
+    private static string checkDate(string date)
+    {
+        string status = null;
+        if (date == null)
+            status += "missing date, ";
+        else if (date.Length != 10)
+            status += "illegal date, ";
+        return status;
+    }
+    private static string checkBody(string body)
+    {
+        string status = null;
+        if (body == null)
+            status += "missing body, ";
+        try
+        {
+            FromJson<Category>(body);
+        }
+        catch (Exception)
+        {
+            status += "illegal body, ";
+        }
+        return status;
     }
     private static string UnixTimestamp()
     {
