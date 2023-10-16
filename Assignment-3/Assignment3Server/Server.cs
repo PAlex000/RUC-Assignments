@@ -12,21 +12,34 @@ public class Server {
         int port = 5000;
         var server = new TcpListener(IPAddress.Loopback, port);
         server.Start();
-
-        Console.WriteLine("Server started");
-        var categories = new List<Category>
+        List<Category> categories = new List<Category>
         {
             new Category{Id = 1, Name = "Beverages"},
             new Category{Id = 2, Name = "Condiments"},
             new Category{Id = 3, Name = "Confections"}
         };
+        Console.WriteLine("Server started");
 
         while (true)
         {
             var client = server.AcceptTcpClient();
-            Response request = client.ReadResponse(categories);
-            client.SendRequest(request.ToJson());
+            Console.WriteLine("Client connected");
+            var t = new Thread(() => HandleClientWithThread(client, categories));
+            t.Start();
         }
+    }
+    private static void HandleClientWithThread(object? obj, List<Category> categories)
+    {
+        var client = obj as TcpClient;
+
+        if (client == null) return;
+
+        HandleClient(client, categories);
+    }
+    private static void HandleClient(TcpClient client, List<Category> categories)
+    {
+        Response request = client.ReadResponse(categories);
+        client.SendRequest(request.ToJson());
     }
 }
 
