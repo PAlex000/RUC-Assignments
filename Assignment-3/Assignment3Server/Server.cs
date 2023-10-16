@@ -51,7 +51,6 @@ public static class Util
     public static Response ReadResponse(this TcpClient client,List<Category> categories)
     {
         var strm = client.GetStream();
-        //strm.ReadTimeout = 250;
         byte[] resp = new byte[2048];
         using (var memStream = new MemoryStream())
         {
