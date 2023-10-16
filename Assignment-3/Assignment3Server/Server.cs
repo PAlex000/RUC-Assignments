@@ -4,25 +4,30 @@ using System.Text.Json;
 using System.Text;
 using System.Text.Json.Serialization;
 
-var port = 5000;
-
-var server = new TcpListener(IPAddress.Loopback, port);
-server.Start();
 
 
-Console.WriteLine("Server started");
-var categories = new List<Category>
+public class Server {
+    public static void Main()
+    {
+        int port = 5000;
+        var server = new TcpListener(IPAddress.Loopback, port);
+        server.Start();
+
+        Console.WriteLine("Server started");
+        var categories = new List<Category>
         {
             new Category{Id = 1, Name = "Beverages"},
             new Category{Id = 2, Name = "Condiments"},
             new Category{Id = 3, Name = "Confections"}
         };
 
-while (true)
-{
-    var client = server.AcceptTcpClient();
-    Response request = client.ReadResponse(categories);
-    client.SendRequest(request.ToJson());
+        while (true)
+        {
+            var client = server.AcceptTcpClient();
+            Response request = client.ReadResponse(categories);
+            client.SendRequest(request.ToJson());
+        }
+    }
 }
 
 public class Response
