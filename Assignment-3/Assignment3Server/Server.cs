@@ -9,12 +9,18 @@ var port = 5000;
 var server = new TcpListener(IPAddress.Loopback, port);
 server.Start();
 
-Console.WriteLine("Server started");
 
+Console.WriteLine("Server started");
+var categories = new List<Category>
+        {
+            new Category{Id = 1, Name = "Beverages"},
+            new Category{Id = 2, Name = "Condiments"},
+            new Category{Id = 3, Name = "Confections"}
+        };
 while (true)
 {
     var client = server.AcceptTcpClient();
-    Response request = client.ReadResponse();
+    Response request = client.ReadResponse(categories);
     client.SendRequest(request.ToJson());
     //client.Close();
 }
@@ -58,17 +64,11 @@ public static class Util
         client.GetStream().Write(msg, 0, msg.Length);
     }
 
-    public static Response ReadResponse(this TcpClient client)
+    public static Response ReadResponse(this TcpClient client,List<Category> categories)
     {
         var strm = client.GetStream();
         //strm.ReadTimeout = 250;
         byte[] resp = new byte[2048];
-        var categories = new List<Category>
-        {
-            new Category{Id = 1, Name = "Beverages"},
-            new Category{Id = 2, Name = "Condiments"},
-            new Category{Id = 3, Name = "Confections"}
-        };
         using (var memStream = new MemoryStream())
         {
             int bytesread = 0;
@@ -169,15 +169,10 @@ public static class Util
             {
 
                 var uniqueID = Int16.Parse(tempPath[3]);
-                foreach (Category item in categories)
-                {
-                    if (item.Id == uniqueID)
-                    {
-                        var valami = FromJson<Category>(requestData.Body);
-                        item.Name = valami.Name;
-                        response.Status = "3 updated";
-                    }
-                }
+                var valami = FromJson<Category>(requestData.Body);
+                int index = categories.FindIndex(item => item.Id == uniqueID);
+                categories[index] = valami;
+                response.Status = "3 updated";
             }
             return response;
         }
