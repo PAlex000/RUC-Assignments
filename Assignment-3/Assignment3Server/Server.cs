@@ -17,12 +17,12 @@ var categories = new List<Category>
             new Category{Id = 2, Name = "Condiments"},
             new Category{Id = 3, Name = "Confections"}
         };
+
 while (true)
 {
     var client = server.AcceptTcpClient();
     Response request = client.ReadResponse(categories);
     client.SendRequest(request.ToJson());
-    //client.Close();
 }
 
 public class Response

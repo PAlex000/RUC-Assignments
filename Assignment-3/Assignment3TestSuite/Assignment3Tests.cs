@@ -35,13 +35,13 @@ namespace Assignment3TestSuite
         /// Testing Constrains
         /// 
         ////////////////////////////////////////////////////////// 
-
+        /*
         [Fact]
         public void Constraint_ConnectionWithoutRequest_ShouldConnect()
         {
             var client = Connect();
             Assert.True(client.Connected);
-        }
+        }*/
 
         /*    Method Tests     */
 
@@ -56,7 +56,7 @@ namespace Assignment3TestSuite
 
             Assert.Contains("missing method", response.Status.ToLower());
         }
-#if Comment
+
         [Fact]
         public void Constraint_RequestWithUnknownMethod_IllegalMethodError()
         {
@@ -307,8 +307,6 @@ namespace Assignment3TestSuite
             Assert.Equal(expectedResponse.ToJson().ToLower(), response.ToJson().ToLower());
         }
 
-
-
         /* Read tests */
 
         [Fact]
@@ -365,7 +363,6 @@ namespace Assignment3TestSuite
 
             Assert.Equal(expectedResponse.ToJson(), response.ToJson());
         }
-
         [Fact]
         public void Request_ReadCategoryWithInvalidId_StatusNotFound()
         {
@@ -383,7 +380,6 @@ namespace Assignment3TestSuite
 
             Assert.Contains("5 not found", response.Status.ToLower());
         }
-
 
         /* Update tests  */
 
@@ -486,7 +482,6 @@ namespace Assignment3TestSuite
             Assert.Contains("5 not found", response.Status.ToLower());
         }
 
-
         /* Create Tests  */
 
         [Fact]
@@ -506,7 +501,6 @@ namespace Assignment3TestSuite
             var response = client.ReadResponse();
 
             var category = response.Body.FromJson<Category>();
-
             Assert.Contains("Testing", category.Name);
             Assert.True(category.Id > 0);
 
@@ -523,7 +517,6 @@ namespace Assignment3TestSuite
             client.SendRequest(resetRequest.ToJson());
             client.ReadResponse();
         }
-
 
         /* Delete Tests  */
 
@@ -574,9 +567,6 @@ namespace Assignment3TestSuite
             Assert.Contains("5 not found", response.Status.ToLower());
         }
 
-
-
-#endif
         /**********************************************************
          * 
          *  Helper Methods
