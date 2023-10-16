@@ -35,13 +35,13 @@ namespace Assignment3TestSuite
         /// Testing Constrains
         /// 
         ////////////////////////////////////////////////////////// 
-        /*
+
         [Fact]
         public void Constraint_ConnectionWithoutRequest_ShouldConnect()
         {
             var client = Connect();
             Assert.True(client.Connected);
-        }*/
+        }
 
         /*    Method Tests     */
 
