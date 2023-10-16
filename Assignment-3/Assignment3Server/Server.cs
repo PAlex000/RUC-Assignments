@@ -2,9 +2,9 @@
 using System.Net.Sockets;
 using System.Text.Json;
 using System.Text;
-using System.Text.Json.Serialization;
-
-
+using categoryNS;
+using responseNS;
+using requestNS;
 
 public class Server {
     public static void Main()
@@ -28,27 +28,6 @@ public class Server {
             client.SendRequest(request.ToJson());
         }
     }
-}
-
-public class Response
-{
-    public string Status { get; set; }
-    public string Body { get; set; }
-}
-public class Request
-{
-    public string Method { get; set; }
-    public string Path { get; set; }
-    public string Date { get; set; }
-    public string Body { get; set; }
-}
-
-public class Category
-{
-    [JsonPropertyName("cid")]
-    public int Id { get; set; }
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
 }
 
 public static class Util
