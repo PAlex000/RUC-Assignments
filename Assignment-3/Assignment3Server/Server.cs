@@ -63,6 +63,12 @@ public static class Util
         var strm = client.GetStream();
         //strm.ReadTimeout = 250;
         byte[] resp = new byte[2048];
+        var categories = new List<Category>
+        {
+            new Category{Id = 1, Name = "Beverages"},
+            new Category{Id = 2, Name = "Condiments"},
+            new Category{Id = 3, Name = "Confections"}
+        };
         using (var memStream = new MemoryStream())
         {
             int bytesread = 0;
@@ -112,11 +118,12 @@ public static class Util
                 response.Body = requestData.Body;
 
             //Path cases
+            string[] tempPath = new string[0];
             if (requestData.Path != null)
             {
                 if (!requestData.Path.StartsWith("/api/categories"))
                     response.Status += "4 Bad Request";
-                var tempPath = requestData.Path.Split('/'); // "/api/categories/1"
+                tempPath = requestData.Path.Split('/'); // "/api/categories/1"
                 if (requestData.Method != "create")
                 {
                     if (tempPath.Length > 3) // So it's not just /api/categories
@@ -141,8 +148,22 @@ public static class Util
                     if (tempPath.Length != 4)
                         response.Status = "4 Bad Request";
             }
+            if (requestData.Method == "read" && response.Status == null)
+            {
+                response.Status = "1 Ok";
+                if (tempPath.Length == 4)
+                {
+                    var uniqueID = Int16.Parse(tempPath[3]);
+                    foreach (var item in categories)
+                    {
+                        if (item.Id == uniqueID)
+                            response.Body = item.ToJson();
+                    }
+                }
+                else
+                    response.Body = categories.ToJson();
+            }
             return response;
-
         }
     }
     private static string UnixTimestamp()
