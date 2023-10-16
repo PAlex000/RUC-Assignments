@@ -89,7 +89,7 @@ public static class Util
                 requestData.Method == "update")
             {
                 if (checkBody(requestData.Body) != null)
-                    response.Status += (checkBody(requestData.Body));
+                    response.Status += checkBody(requestData.Body);
             }
             //Echo case
             if (requestData.Method == "echo")
