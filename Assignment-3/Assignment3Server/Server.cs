@@ -172,6 +172,7 @@ public static class Util
                 catch (Exception)
                 { response.Status = "5 Not Found"; }
             }
+
             if (requestData.Method == "create" && response.Status == null)
             {
                 Category newCat = new Category();
@@ -183,10 +184,19 @@ public static class Util
             }
             if (requestData.Method == "delete" && response.Status == null)
             {
-                var uniqueID = Int16.Parse(tempPath[3]);
-                categories.RemoveAt(uniqueID - 1);
-                response.Status = "1 Ok";
+                try
+                {
+                    var uniqueID = Int16.Parse(tempPath[3]);
+                    categories.RemoveAt(uniqueID - 1);
+                    response.Status = "1 Ok";
+                }
+                catch (Exception)
+                {
+                    response.Status = "5 Not Found";
+                }
+
             }
+
             return response;
         }
     }
