@@ -16,7 +16,7 @@ while (true)
     var client = server.AcceptTcpClient();
     Response request = client.ReadResponse();
     client.SendRequest(request.ToJson());
-    client.Close();
+    //client.Close();
 }
 
 public class Response
@@ -67,10 +67,6 @@ public static class Util
         {
             int bytesread = 0;
             Response response = new Response();
-            if (!strm.DataAvailable) {
-                response.Status = "Only connection?!";
-                return response;
-            }
             do
             {
                 bytesread = strm.Read(resp, 0, resp.Length);
@@ -98,19 +94,53 @@ public static class Util
             else if (requestData.Date.Length != 10)
                 response.Status += "illegal date, ";
             //Body cases
-            if (requestData.Body == null)
-                response.Status += "missing body, ";
-            try
+            if (requestData.Method == "echo" || requestData.Method == "create" || requestData.Method == "update")
             {
-                FromJson<String>(response.Body);
-            }
-            catch (Exception)
-            {
-                response.Status += "illegal body, ";
+                if (requestData.Body == null)
+                    response.Status += "missing body, ";
+                try
+                {
+                    FromJson<String>(response.Body);
+                }
+                catch (Exception)
+                {
+                    response.Status += "illegal body, ";
+                }
             }
             //Echo case
             if (requestData.Method == "echo")
                 response.Body = requestData.Body;
+
+            //Path cases
+            if (requestData.Path != null)
+            {
+                if (!requestData.Path.StartsWith("/api/categories"))
+                    response.Status += "4 Bad Request";
+                var tempPath = requestData.Path.Split('/'); // "/api/categories/1"
+                if (requestData.Method != "create")
+                {
+                    if (tempPath.Length > 3) // So it's not just /api/categories
+                        try
+                        {
+                            Int16.Parse(tempPath[3]);
+                        }
+                        catch (Exception)
+                        {
+                            response.Status += "4 Bad Request";
+                        }
+                }
+                else
+                {
+                    if (tempPath.Length != 3 && requestData.Body != null)
+                        response.Status = "4 Bad Request";
+                }
+                if (requestData.Method == "update" && requestData.Body != null && requestData.Date.Length == 10)
+                    if (tempPath.Length != 4)
+                        response.Status = "4 Bad Request";
+                if (requestData.Method == "delete")
+                    if (tempPath.Length != 4)
+                        response.Status = "4 Bad Request";
+            }
             return response;
 
         }
