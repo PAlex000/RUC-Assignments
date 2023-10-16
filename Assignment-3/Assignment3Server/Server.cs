@@ -105,13 +105,9 @@ public static class Util
                 {
                     if (tempPath.Length > 3) // So it's not just /api/categories
                         try
-                        {
-                            Int16.Parse(tempPath[3]);
-                        }
+                        { Int16.Parse(tempPath[3]); }
                         catch (Exception)
-                        {
-                            response.Status += "4 Bad Request";
-                        }
+                        { response.Status += "4 Bad Request";}
                 }
                 else
                 {
@@ -154,9 +150,7 @@ public static class Util
                     response.Status = "3 updated";
                 }
                 catch (Exception)
-                {
-                    response.Status = "5 Not Found";
-                }
+                { response.Status = "5 Not Found"; }
             }
             if (requestData.Method == "create" && response.Status == null)
             {
@@ -176,9 +170,7 @@ public static class Util
                     response.Status = "1 Ok";
                 }
                 catch (Exception)
-                {
-                    response.Status = "5 Not Found";
-                }
+                { response.Status = "5 Not Found"; }
             }
             return response;
         }
