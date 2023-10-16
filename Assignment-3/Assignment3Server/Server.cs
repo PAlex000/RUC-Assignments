@@ -182,6 +182,21 @@ public static class Util
                 }
 
             }
+            if (requestData.Method == "create" && response.Status == null)
+            {
+                Category newCat = new Category();
+                newCat.Id = categories.Count + 1;
+                newCat.Name = FromJson<Category>(requestData.Body).Name;
+                categories.Add(newCat);
+                response.Body = newCat.ToJson();
+                response.Status = "2 Created";
+            }
+            if (requestData.Method == "delete" && response.Status == null)
+            {
+                var uniqueID = Int16.Parse(tempPath[3]);
+                categories.RemoveAt(uniqueID - 1);
+                response.Status = "1 Ok";
+            }
             return response;
         }
     }
