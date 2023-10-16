@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text.Json;
 using System.Text;
 using System.Text.Json.Serialization;
+using Assignment3Server; // in order to use the request, response and category classes
 
 var port = 5000;
 
@@ -11,33 +12,18 @@ server.Start();
 
 Console.WriteLine("Server started");
 
+var categories = new List<Category>
+{
+    new Category{Id = 1, Name = "Beverages" },
+    new Category{Id = 2, Name = "Condiments"},
+    new Category{Id = 3, Name = "Confections"}
+};
+
 while (true)
 {
     var client = server.AcceptTcpClient();
-    Response request = client.ReadResponse();
+    Response request = client.ReadResponse(categories);
     client.SendRequest(request.ToJson());
-    client.Close();
-}
-
-public class Response
-{
-    public string Status { get; set; }
-    public string Body { get; set; }
-}
-public class Request
-{
-    public string Method { get; set; }
-    public string Path { get; set; }
-    public string Date { get; set; }
-    public string Body { get; set; }
-}
-
-public class Category
-{
-    [JsonPropertyName("cid")]
-    public int Id { get; set; }
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
 }
 
 public static class Util
@@ -120,4 +106,3 @@ public static class Util
         return DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
     }
 }
-
