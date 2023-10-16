@@ -170,9 +170,17 @@ public static class Util
 
                 var uniqueID = Int16.Parse(tempPath[3]);
                 var element = FromJson<Category>(requestData.Body);
-                int index = categories.FindIndex(item => item.Id == uniqueID);
-                categories[index] = element;
-                response.Status = "3 updated";
+                try
+                {
+                    int index = categories.FindIndex(item => item.Id == uniqueID);
+                    categories[index] = element;
+                    response.Status = "3 updated";
+                }
+                catch (Exception)
+                {
+                    response.Status = "5 Not Found";
+                }
+
             }
             return response;
         }
