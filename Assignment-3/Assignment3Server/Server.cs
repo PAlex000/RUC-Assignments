@@ -159,6 +159,8 @@ public static class Util
                         if (item.Id == uniqueID)
                             response.Body = item.ToJson();
                     }
+                    if (response.Body == null)
+                        response.Status = "5 Not Found";
                 }
                 else
                     response.Body = categories.ToJson();
