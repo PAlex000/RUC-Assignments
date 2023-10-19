@@ -55,4 +55,10 @@ public class DataService
         }
         return false;
     }
+    public Product? GetProduct(int productId)
+    {
+        var db = new NorthwindContex();
+        Product product = db.Products.First(x => x.Id == productId);
+        return product;
+    }
 }

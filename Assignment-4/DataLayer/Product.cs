@@ -8,6 +8,6 @@ public class Product
     public string QuantityPerUnit { get; set; }
     public int UnitsInStock { get; set; }
     public int CategoryId { get; set; }
-    public int ProductId { get; set; }
+    Category category { get; set; }
 
 }
