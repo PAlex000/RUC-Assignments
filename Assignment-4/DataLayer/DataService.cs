@@ -42,4 +42,17 @@ public class DataService
         }
         return false;
     }
+    public bool UpdateCategory(int id, string name, string description)
+    {
+        var db = new NorthwindContex();
+        var category = db.Categories.FirstOrDefault(x => x.Id == id);
+        if (category != null)
+        {
+            category.Name = name;
+            category.Description = description;
+            db.Update(category);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
 }
