@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer;
 
@@ -66,4 +67,26 @@ public class DataService
         Console.WriteLine("update failed");
         return false;
     }
+
+    public Product GetProduct(int id)
+    {
+        var db = new NorthwindContex();
+        var product = db.Products.Include(x => x.Category).FirstOrDefault(x => x.Id == id);
+
+        if (product != null && product.Category != null)
+        {
+            product.CategoryName = product.Category.Name;
+        }
+
+        return product;
+    }
+
+    //Error @ Don't know what pk to use. Must define a composite key ?
+    public Order GetOrder(int id)
+    {
+        var db = new NorthwindContex();
+        var order = db.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.Category).FirstOrDefault(o => o.Id == id);
+        return order;
+    }
+
 }
