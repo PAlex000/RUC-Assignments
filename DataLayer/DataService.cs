@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DataLayer;
 
@@ -68,25 +69,46 @@ public class DataService
         return false;
     }
 
+    //Bogey one. Needs to be re-done because it's not right.
     public Product GetProduct(int id)
     {
         var db = new NorthwindContex();
         var product = db.Products.Include(x => x.Category).FirstOrDefault(x => x.Id == id);
 
-        if (product != null && product.Category != null)
-        {
-            product.CategoryName = product.Category.Name;
-        }
+        //if (product != null && product.Category != null)
+        //{
+        //    product.CategoryName = product.Category.Name;
+        //}
 
         return product;
     }
 
-    //Error @ Don't know what pk to use. Must define a composite key ?
     public Order GetOrder(int id)
     {
         var db = new NorthwindContex();
         var order = db.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).ThenInclude(p => p.Category).FirstOrDefault(o => o.Id == id);
         return order;
     }
+
+    public List<Order> GetOrders()
+    {
+        var db = new NorthwindContex();
+        return db.Orders.ToList();
+    }
+
+    public List<OrderDetails> GetOrderDetailsByOrderId(int id)
+    {
+        var db = new NorthwindContex();
+        var orderDetails = db.OrderDetails.Include(od => od.Product).Where(od => od.OrderId == id).ToList();
+        return orderDetails;
+    } 
+
+    public List<OrderDetails> GetOrderDetailsByProductId(int id)
+    {
+        var db = new NorthwindContex();
+        var orderDetails = db.OrderDetails.Include(od => od.Order).Where(od=>od.ProductId == id).OrderBy(od => od.OrderId).ToList();
+        return orderDetails;
+    }
+
 
 }

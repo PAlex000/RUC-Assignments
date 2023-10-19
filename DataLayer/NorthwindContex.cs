@@ -49,12 +49,16 @@ public class NorthwindContex : DbContext
         modelBuilder.Entity<Order>()
             .Property(x => x.Date).HasColumnName("orderdate");
         modelBuilder.Entity<Order>()
+            .Property(x => x.Required).HasColumnName("requireddate");
+        modelBuilder.Entity<Order>()
             .Property(x => x.ShipCity).HasColumnName("shipcity");
         modelBuilder.Entity<Order>()
-            .Property(x => x.ShipName).HasColumnName("shipcity");
+            .Property(x => x.ShipName).HasColumnName("shipname");
 
 
         modelBuilder.Entity<OrderDetails>().ToTable("orderdetails");
+        modelBuilder.Entity<OrderDetails>()
+            .HasKey(od => new { od.OrderId, od.ProductId });
         modelBuilder.Entity<OrderDetails>()
             .Property(x => x.OrderId).HasColumnName("orderid");
         modelBuilder.Entity<OrderDetails>()
