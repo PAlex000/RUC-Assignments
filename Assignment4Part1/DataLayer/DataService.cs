@@ -11,3 +11,9 @@ public class DataService
         var db = new NorthwindContex();
     }
 }
+
+// public DeleteCategory
+// GetGategory
+// CreateCategory
+// UpdateCategory
+// Addproduct
