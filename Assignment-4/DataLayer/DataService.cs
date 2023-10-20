@@ -1,4 +1,6 @@
-﻿namespace DataLayer;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace DataLayer;
 
 public class DataService
 {
@@ -37,7 +39,6 @@ public class DataService
         if (category != null)
         {
             db.Categories.Remove(category);
-            //db.Remove(category);
             return db.SaveChanges() > 0;
         }
         return false;
@@ -83,7 +84,7 @@ public class DataService
                 UnitPrice = x.UnitPrice,
                 QuantityPerUnit = x.QuantityPerUnit,
                 UnitsInStock = x.UnitsInStock,
-                CategoryName = x.category.Name
+                CategoryName = x.Category.Name
             })
             .ToList();
     }
@@ -93,7 +94,23 @@ public class DataService
 
         return db.Products
             .Where(x => x.Name.ToLower().Contains(productName.ToLower()))
-            .Select(x => new ProductAndCategoryNames { ProductName = x.Name, CategoryName = x.category.Name })
+            .Select(x => new ProductAndCategoryNames { ProductName = x.Name, CategoryName = x.Category.Name })
             .ToList();
+    }
+
+    public Order GetOrder(int orderId)
+    {
+        var db = new NorthwindContex();
+        return db.Orders
+            .Include(o => o.OrderDetails)
+            .ThenInclude(od => od.Product)
+            .ThenInclude(p => p.Category)
+            .FirstOrDefault(x => x.Id == orderId);
+    }
+
+    public List<Order> GetOrders()
+    {
+        var db = new NorthwindContex();
+        return db.Orders.ToList();
     }
 }
