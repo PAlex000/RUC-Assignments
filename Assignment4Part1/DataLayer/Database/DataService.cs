@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel;
+using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace DataLayer;
+namespace DataLayer.Database;
 
 public class DataService
 {
     public IList<Category> GetCategories()
     {
-        var db = new NorthwindContex();
+        var db = new NorthwindContext();
     }
 }
 
