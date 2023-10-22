@@ -1,4 +1,5 @@
-using DataLayer;
+using DataLayer.Models;
+using DataLayer.Database;
 namespace Assignment4.Tests;
 
 public class DataServiceTests
