@@ -55,12 +55,21 @@ public class CategoriesController : ControllerBase
             Description = model.Description
         };
 
-        _dataService.CreateCategory(category.Name, category.Description);
-
-        return Ok(category);
+        Category newCat = _dataService.CreateCategory(category.Name, category.Description);
+        return Created(GetUrl(nameof(GetCategory), new { newCat.Id }), newCat);
     }
-
-
+    [HttpPut("{id}")]
+    public IActionResult UpdateCategory(int id, Category newCategory)
+    {
+        bool result = _dataService.UpdateCategory(id, newCategory.Name, newCategory.Description);
+        return result ? Ok() : NotFound();
+    }
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCategory(int id)
+    {
+        bool result = _dataService.DeleteCategory(id);
+        return result ? Ok() : NotFound();
+    }
     private CategoryModel CreateCategoryModel(Category category)
     {
         return new CategoryModel
