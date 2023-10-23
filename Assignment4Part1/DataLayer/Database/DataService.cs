@@ -72,16 +72,51 @@ public class DataService
 
     }
 
-    // need to find an alternative way
-
-    /* public Product GetProduct(int ProductId) 
+    // GetProduct
+    public ProductWithCategoryName GetProduct(int productId) 
     {
         var db = new NorthwindContext();
-        Product product = db.Products.FirstOrDefault(x => x.Id == ProductId);
+        Product product = db.Products.FirstOrDefault(x => x.Id == productId);
         Category category = db.Categories.FirstOrDefault(x => x.Id == product.CategoryId);
+        ProductWithCategoryName result = new ProductWithCategoryName()
+        {
+            Id = productId,
+            Name = product.Name,
+            UnitPrice = product.UnitPrice,
+            QuantityPerUnit = product.QuantityPerUnit,
+            UnitsInStock = product.UnitsInStock,
+            CategoryName = category.Name
+        };
+        return result;
     }
-    
-    } */
+
+    //GetProductByCategory
+
+    public List<ProductWithCategoryName> GetProductByCategory(int categoryId)
+    {
+        var db = new NorthwindContext();
+        return db.Products
+            .Where(x => x.CategoryId == categoryId)
+            .Select(x => new ProductWithCategoryName
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UnitPrice = x.UnitPrice,
+                QuantityPerUnit = x.QuantityPerUnit,
+                UnitsInStock = x.UnitsInStock,
+                CategoryName = x.Category.Name
+            })
+            .ToList();
+    }
+
+    public List<ProductAndCategoryNames> GetProductByName(string productName)
+    {
+        var db = new NorthwindContext();
+        return db.Products
+            .Where(x => x.Name.ToLower().Contains(productName.ToLower()))
+            .Select (x => new ProductAndCategoryNames{ ProductName = x.Name, CategoryName = x.Category.Name })
+            .ToList();
+    }
 
     //GetCategoriesByName
     public List<Category> GetCategoriesByName(string name)
@@ -90,27 +125,16 @@ public class DataService
         return db.Categories.Where(x => x.Name.Contains(name)).ToList();
     }
 
-    public List<Product> GetProductByName(string productName)
+    public static Order? GetOrder(int orderId)
     {
         var db = new NorthwindContext();
-        return db.Products.Where(x => x.Name.ToLower().Contains(productName.ToLower())
-        .Select(x => new AssemblyProductAttribute(x)).ToList());
-    }
-
-    //GetProductByName
-
-    //GetProductByCategory
-
-    public Order GetOrder(int orderId)
-    {
-        var db = new NorthwindContext();
-        return db.Orders
+        var order = db.Orders
             .Include(o => o.OrderDetails)
             .ThenInclude(od => od.Product)
             .ThenInclude(p => p.Category)
             .FirstOrDefault(x => x.Id == orderId);
 
-
+        return order;
     }
 
     public static List<Order> GetOrders()
@@ -119,7 +143,7 @@ public class DataService
         return db.Orders.ToList();
     }
 
-    public List<OrderDetails> GetOrderDetailsByOrderId (int orderId)
+    public List<OrderDetails> GetOrderDetailsByOrderId(int orderId)
     {
         var db = new NorthwindContext();
         return db.OrderDetails
@@ -128,7 +152,7 @@ public class DataService
             .ToList();
     }
 
-    public List<OrderDetails> GetOrderDetailsByProductId (int productId)
+    public List<OrderDetails> GetOrderDetailsByProductId(int productId)
     {
         var db = new NorthwindContext();
         return db.OrderDetails

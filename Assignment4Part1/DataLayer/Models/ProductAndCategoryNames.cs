@@ -9,7 +9,7 @@ namespace DataLayer.Models
     public class ProductAndCategoryNames
     {
 
-        public string CategoryName { get; set; } = null!;
-        public string ProductName { get; set; } = null!;
+        public string CategoryName { get; set; }
+        public string ProductName { get; set; } 
     }
 }
