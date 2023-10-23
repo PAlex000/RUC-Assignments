@@ -43,7 +43,7 @@ namespace DataLayer
         }
         public bool UpdateCategory(int id, string name, string description)
         {
-            var category = db.Categories.FirstOrDefault(x => x.Id == id);
+            var category = GetCategory(id);
             if (category != null)
             {
                 category.Name = name;
