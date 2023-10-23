@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,7 @@ namespace DataLayer.Database;
 
 public class DataService
 {
-    public IList<Category> GetCategories()
+    public List<Category> GetCategories()
     {
         var db = new NorthwindContext();
         return db.Categories.ToList();
@@ -70,8 +71,70 @@ public class DataService
         return false;
 
     }
+
+    // need to find an alternative way
+
+    /* public Product GetProduct(int ProductId) 
+    {
+        var db = new NorthwindContext();
+        Product product = db.Products.FirstOrDefault(x => x.Id == ProductId);
+        Category category = db.Categories.FirstOrDefault(x => x.Id == product.CategoryId);
+    }
     
+    } */
+
+    //GetCategoriesByName
+    public List<Category> GetCategoriesByName(string name)
+    {
+        var db = new NorthwindContext();
+        return db.Categories.Where(x => x.Name.Contains(name)).ToList();
     }
 
+    public List<Product> GetProductByName(string productName)
+    {
+        var db = new NorthwindContext();
+        return db.Products.Where(x => x.Name.ToLower().Contains(productName.ToLower())
+        .Select(x => new AssemblyProductAttribute(x)).ToList());
+    }
 
-// Addproduct
+    //GetProductByName
+
+    //GetProductByCategory
+
+    public Order GetOrder(int orderId)
+    {
+        var db = new NorthwindContext();
+        return db.Orders
+            .Include(o => o.OrderDetails)
+            .ThenInclude(od => od.Product)
+            .ThenInclude(p => p.Category)
+            .FirstOrDefault(x => x.Id == orderId);
+
+
+    }
+
+    public static List<Order> GetOrders()
+    {
+        var db = new NorthwindContext();
+        return db.Orders.ToList();
+    }
+
+    public List<OrderDetails> GetOrderDetailsByOrderId (int orderId)
+    {
+        var db = new NorthwindContext();
+        return db.OrderDetails
+            .Include(x => x.Product)
+            .Where(x => x.OrderId == orderId)
+            .ToList();
+    }
+
+    public List<OrderDetails> GetOrderDetailsByProductId (int productId)
+    {
+        var db = new NorthwindContext();
+        return db.OrderDetails
+            .Include(x => x.Order)
+            .Where(x => x.ProductId == productId)
+            .OrderBy(x => x.OrderId)
+            .ToList();
+    }
+}
