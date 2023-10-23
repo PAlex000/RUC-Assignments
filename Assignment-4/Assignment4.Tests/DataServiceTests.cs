@@ -189,7 +189,6 @@ public class DataServiceTests
         Assert.Equal(14, orderDetails.First().UnitPrice);
         Assert.Equal(12, orderDetails.First().Quantity);
     }
-
     [Fact]
     public void GetOrderDetailByProductId_ValidId_ReturnsOrderDateUnitPriceAndQuantity()
     {
