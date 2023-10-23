@@ -14,6 +14,7 @@ namespace DataLayer
         ProductWithCategoryName GetProduct(int productId);
         List<ProductWithCategoryName> GetProductByCategory(int categoryId);
         List<ProductAndCategoryNames> GetProductByName(string productName);
+        IList<Category> GetCategoriesByName(string name);
         Order GetOrder(int orderId);
         List<Order> GetOrders();
         List<OrderDetails> GetOrderDetailsByOrderId(int orderId);

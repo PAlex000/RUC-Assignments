@@ -90,6 +90,10 @@ namespace DataLayer
                 .Select(x => new ProductAndCategoryNames { ProductName = x.Name, CategoryName = x.Category.Name })
                 .ToList();
         }
+        public IList<Category> GetCategoriesByName(string name)
+        {
+            return db.Categories.Where(x => x.Name.Contains(name)).ToList();
+        }
 
         public Order GetOrder(int orderId)
         {
