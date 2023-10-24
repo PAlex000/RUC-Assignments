@@ -1,0 +1,12 @@
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/bin/Debug/net6.0/DataLayer.deps.json
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/bin/Debug/net6.0/DataLayer.dll
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/bin/Debug/net6.0/DataLayer.pdb
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/DataLayer.GeneratedMSBuildEditorConfig.editorconfig
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/DataLayer.AssemblyInfoInputs.cache
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/DataLayer.AssemblyInfo.cs
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/DataLayer.csproj.CoreCompileInputs.cache
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/DataLayer.dll
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/refint/DataLayer.dll
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/DataLayer.pdb
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/ref/DataLayer.dll
+/Users/cristina-genovevabodnari/Desktop/untitled folder/CIT_2023_Livecode5/DataLayer/obj/Debug/net6.0/DataLayer.csproj.AssemblyReference.cache
