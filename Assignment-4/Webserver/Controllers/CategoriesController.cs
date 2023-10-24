@@ -54,7 +54,6 @@ public class CategoriesController : ControllerBase
             Name = model.Name,
             Description = model.Description
         };
-
         Category newCat = _dataService.CreateCategory(category.Name, category.Description);
         return Created(GetUrl(nameof(GetCategory), new { newCat.Id }), newCat);
     }
@@ -80,7 +79,6 @@ public class CategoriesController : ControllerBase
             Description = category.Description
         };
     }
-
     private string? GetUrl(string name, object values)
     {
         return _linkGenerator.GetUriByName(HttpContext, name, values);
