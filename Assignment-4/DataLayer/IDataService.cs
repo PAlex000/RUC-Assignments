@@ -11,9 +11,10 @@ namespace DataLayer
         bool DeleteCategory(Category category);
         bool DeleteCategory(int categoryId);
         bool UpdateCategory(int id, string name, string description);
+        IList<Product> GetProducts();
         ProductWithCategoryName GetProduct(int productId);
-        List<ProductWithCategoryName> GetProductByCategory(int categoryId);
-        List<ProductAndCategoryNames> GetProductByName(string productName);
+        IList<ProductWithCategoryName> GetProductByCategory(int categoryId);
+        IList<ProductAndCategoryNames> GetProductByName(string productName);
         IList<Category> GetCategoriesByName(string name);
         Order GetOrder(int orderId);
         List<Order> GetOrders();

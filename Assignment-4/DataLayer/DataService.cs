@@ -53,9 +53,11 @@ namespace DataLayer
             }
             return false;
         }
-        public ProductWithCategoryName GetProduct(int productId)
+        public ProductWithCategoryName? GetProduct(int productId)
         {
             Product product = db.Products.FirstOrDefault(x => x.Id == productId);
+            if (product == null)
+                return null;
             Category category = db.Categories.FirstOrDefault(x => x.Id == product.CategoryId);
             ProductWithCategoryName result = new ProductWithCategoryName
             {
@@ -68,7 +70,11 @@ namespace DataLayer
             };
             return result;
         }
-        public List<ProductWithCategoryName> GetProductByCategory(int categoryId)
+        public IList<Product> GetProducts()
+        {
+            return db.Products.ToList();
+        }
+        public IList<ProductWithCategoryName> GetProductByCategory(int categoryId)
         {
             return db.Products
                 .Where(x => x.CategoryId == categoryId)
@@ -83,7 +89,7 @@ namespace DataLayer
                 })
                 .ToList();
         }
-        public List<ProductAndCategoryNames> GetProductByName(string productName)
+        public IList<ProductAndCategoryNames> GetProductByName(string productName)
         {
             return db.Products
                 .Where(x => x.Name.ToLower().Contains(productName.ToLower()))
